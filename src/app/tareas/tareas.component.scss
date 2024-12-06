@@ -1,5 +1,22 @@
+// Variables de color
+$background-dark: #1a1a2e;
+$primary-color: #16213e;
+$secondary-color: #0f3460;
+$accent-color: #e94560;
+$text-light: #ffffff;
+$text-dark: #1a1a2e;
+
+// Estados de tareas
+$estado-pendiente: #e94560;
+$estado-progreso: #ffd460;
+$estado-completada: #70af85;
+
+// Agregar variables globales al inicio
+$mobile-breakpoint: 768px;
+$tablet-breakpoint: 1024px;
+
 main {
-    background-color: #191919;
+    background-color: $background-dark;
     height: 100vh;
     width: 100vw;
     overflow-y: scroll;
@@ -18,9 +35,19 @@ section.filtros {
     width: 40vw;
     margin: 0 auto;
     padding: 2rem 4rem;
-    background-color: #313131;
+    background-color: $primary-color;
     border-radius: 1rem;
-    color: #ffffff;
+    color: $text-light;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: $mobile-breakpoint) {
+        width: 90vw;
+        padding: 1rem;
+    }
+
+    @media (max-width: $tablet-breakpoint) and (min-width: $mobile-breakpoint) {
+        width: 70vw;
+    }
 
     .filtro {
         padding: 0.5rem 0;
@@ -28,6 +55,11 @@ section.filtros {
 
     input, select {
         font-size: 1rem;
+        background-color: $secondary-color;
+        color: $text-light;
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
     }
 
     .filtros-busqueda {
@@ -54,6 +86,15 @@ section.filtros {
             border-radius: 0.5rem;
             border: none;
         }
+
+        @media (max-width: $mobile-breakpoint) {
+            flex-direction: column;
+            gap: 1rem;
+
+            input, select {
+                width: 100%;
+            }
+        }
     }
 }
 
@@ -64,7 +105,13 @@ section.tareas {
     margin: 2rem auto;
     color: #ffffff;
 
+    @media (max-width: $mobile-breakpoint) {
+        width: 90vw;
+    }
 
+    @media (max-width: $tablet-breakpoint) and (min-width: $mobile-breakpoint) {
+        width: 70vw;
+    }
 
     .tareas-header {
         display: flex;
@@ -78,11 +125,14 @@ section.tareas {
             border-radius: 0.5rem;
             border: none;
             cursor: pointer;
-        }
+            background-color: $accent-color;
+            color: $text-light;
 
-        .tareas-header-button:hover {
-            background-color: #ffffff;
-            color: #191919;
+            &:hover {
+                background-color: darken($accent-color, 10%);
+                transform: translateY(-2px);
+                transition: all 0.3s ease;
+            }
         }
 
         .tareas-header-button:active {
@@ -102,10 +152,22 @@ section.tareas {
             display: flex;
             flex-direction: column;
             padding: 1rem;
-            background-color: #313131;
+            background-color: $primary-color;
             border-radius: 1rem;
             min-width: 200px;
             justify-content: space-between;
+            flex: 1 1 200px;
+            max-width: calc(50% - 1rem);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+
+            @media (max-width: $mobile-breakpoint) {
+                max-width: 100%;
+            }
+
+            &:hover {
+                transform: translateY(-5px);
+            }
 
             .tarea-actions {
                 display: flex;
@@ -123,26 +185,33 @@ section.tareas {
         }
 
         .tarea.pendiente {
-            background-color: #ff6969;
+            background-color: $estado-pendiente;
         }
 
         .tarea.en-progreso {
-            background-color: #ffcf76;
-            color: #191919;
+            background-color: $estado-progreso;
+            color: $text-dark;
         }
 
         .tarea.completada {
-            background-color: #b2edb2;
-            color: #191919;
+            background-color: $estado-completada;
+            color: $text-dark;
         }
 
         .editar {
-            background-color: #ededed;
+            background-color: $secondary-color;
+            color: $text-light;
+            &:hover {
+                background-color: darken($secondary-color, 10%);
+            }
         }
 
         .eliminar {
-            background-color: #b94343;
-            color: #ffffff;
+            background-color: $estado-pendiente;
+            color: $text-light;
+            &:hover {
+                background-color: darken($estado-pendiente, 10%);
+            }
         }
     }
 
@@ -170,16 +239,26 @@ section.tareas {
     width: 100%;
     height: 100%;
     backdrop-filter: blur(10px);
+    background-color: rgba($background-dark, 0.8);
 
     .modal {
         display: flex;
         flex-direction: column;
-        background-color: #313131;
+        background-color: $primary-color;
         padding: 20px;
         border-radius: 10px;
         width: 40%;
         margin: 10% auto;
-        box-shadow: 0 0 10px 0 rgba(151, 151, 151, 0.5);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+        @media (max-width: $mobile-breakpoint) {
+            width: 90%;
+            margin: 5% auto;
+        }
+
+        @media (max-width: $tablet-breakpoint) and (min-width: $mobile-breakpoint) {
+            width: 70%;
+        }
     }
 
     .modal-header {
@@ -221,6 +300,11 @@ section.tareas {
                 padding: 0.5rem;
                 border-radius: 0.5rem;
                 border: none;
+                background-color: $secondary-color;
+                color: $text-light;
+                &::placeholder {
+                    color: rgba(255, 255, 255, 0.7);
+                }
             }
 
             .modal-actions {
@@ -235,6 +319,28 @@ section.tareas {
                     border-radius: 0.5rem;
                     border: none;
                     cursor: pointer;
+                    background-color: $accent-color;
+                    color: $text-light;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background-color: darken($accent-color, 10%);
+                        transform: translateY(-2px);
+                    }
+
+                    &:last-child {
+                        background-color: $secondary-color;
+                    }
+                }
+
+                @media (max-width: $mobile-breakpoint) {
+                    width: 100%;
+                    flex-direction: column;
+                    gap: 1rem;
+
+                    button {
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -262,10 +368,24 @@ section.tareas {
             cursor: pointer;
             }
         }
+
+        @media (max-width: $mobile-breakpoint) {
+            width: 90%;
+            margin: 30vh auto;
+            
+            .modal-confirmacion-actions {
+                flex-direction: column;
+                gap: 1rem;
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
     }
 }
 
 .error {
-    color: #ff6969;
+    color: $estado-pendiente;
 }
 
