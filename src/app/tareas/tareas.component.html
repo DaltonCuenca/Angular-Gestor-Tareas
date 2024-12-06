@@ -1,0 +1,88 @@
+<main>
+    <section class="header">
+        <h1>Gestor de Tareas</h1>
+    </section>
+    <section class="filtros">
+        <h1>Filtros</h1>
+        <div class="filtro filtros-busqueda">
+            <input type="text" placeholder="Buscar" [(ngModel)]="filtroDescripcion" (input)="aplicarFiltros()">
+        </div>
+        <div class="filtro filtros-busqueda-filtros">
+            <input type="date" placeholder="Fecha" [(ngModel)]="filtroFecha" (change)="aplicarFiltros()" (input)="aplicarFiltros()">
+            <select name="estado" id="estado" [(ngModel)]="filtroEstado" (change)="aplicarFiltros()">
+                <option value="">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="en-progreso">En Progreso</option>
+                <option value="completada">Completada</option>
+            </select>
+        </div>
+    </section>
+    <section class="tareas">
+        <div class="tareas-header">
+            <h1>Tareas</h1>
+            <button (click)="abrirModal()" class="tareas-header-button">Agregar Tarea</button>
+        </div>
+        <div class="lista-tareas">
+            <div class="tarea" *ngFor="let tarea of listaFiltros"
+                [ngClass]="{'pendiente': tarea.estado === 'pendiente', 'en-progreso': tarea.estado === 'en-progreso', 'completada': tarea.estado === 'completada'}">
+                <h2>{{ tarea.descripcion }}</h2>
+                <p>{{ tarea.fecha | date:'dd/MM/yyyy':'UTC' }}</p>
+                <p>{{ tarea.estado }}</p>
+                <div class="tarea-actions">
+                    <button (click)="editarTarea(tarea)" class="editar">Editar</button>
+                    <button (click)="eliminarTarea(tarea)" class="eliminar">Eliminar</button>
+                </div>
+            </div>
+            <div class="tarea-empty" *ngIf="listaFiltros.length === 0">
+                <h2>No hay tareas</h2>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div *ngIf="verModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h1>Agregar Tarea</h1>
+            <div class="modal-close" (click)="cerrarModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+        </div>
+        <div class="modal-content">
+            <form (ngSubmit)="guardarTarea()">
+                <!-- Descripción -->
+                <div class="error" *ngIf="!tareaFormValid.descripcion && hasErrors">
+                    <p>La descripción es requerida</p>
+                </div>
+                <input type="text" name="descripcion" placeholder="Descripción" [(ngModel)]="modalTarea.descripcion"
+                    required>
+                <!-- Fecha -->
+                <div class="error" *ngIf="!tareaFormValid.fecha && hasErrors">
+                    <p>La fecha es requerida</p>
+                </div>
+                <input type="date" name="fecha" [(ngModel)]="modalTarea.fecha" required>
+                <!-- Estado -->
+                <select name="estado" [(ngModel)]="modalTarea.estado" required>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="en-progreso">En Progreso</option>
+                    <option value="completada">Completada</option>
+                </select>
+                <div class="modal-actions">
+                    <button type="submit">{{ isEditando ? 'Actualizar' : 'Agregar' }}</button>
+                    <button (click)="cerrarModal()" type="button">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-overlay" *ngIf="verModalConfirmacion">
+    <div class="modal modal-confirmacion">
+        <h3>¿Estás seguro de que deseas eliminar esta tarea?</h3>
+        <div class="modal-confirmacion-actions">
+            <button (click)="eliminarTareaConfirmacion(true)">Eliminar</button>
+            <button (click)="eliminarTareaConfirmacion(false)">Cancelar</button>
+        </div>
+    </div>
+</div>
